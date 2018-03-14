@@ -140,15 +140,20 @@ class BrAccountDocumentSerie(models.Model):
             vals.update({'internal_sequence_id': self._create_sequence(vals)})
         return super(BrAccountDocumentSerie, self).create(vals)
 
+# Criação da classe anexo
+class BrAccountCnaeAnexo(models.Model):
+    _name = 'br_account.cnae.anexo'
+    name = fields.Char(u'Nome', required=True)
+    
 
 class BrAccountCNAE(models.Model):
     _name = 'br_account.cnae'
     _description = 'Cadastro de CNAE'
-
     code = fields.Char(u'Código', size=16, required=True)
     name = fields.Char(u'Descrição', size=64, required=True)
     version = fields.Char(u'Versão', size=16, required=True)
     parent_id = fields.Many2one('br_account.cnae', 'CNAE Pai')
+    anexo_ids = fields.Many2many('br_account.cnae.anexo', string="Anexos", )
     child_ids = fields.One2many(
         'br_account.cnae', 'parent_id', 'CNAEs Filhos')
     internal_type = fields.Selection(
@@ -335,5 +340,5 @@ class BrAccountFiscalObservation(models.Model):
 class BrAccountCategoriaFiscal(models.Model):
     _name = 'br_account.fiscal.category'
     _description = 'Categoria Fiscal'
-
     name = fields.Char('Descrição', required=True)
+
